@@ -22,5 +22,8 @@ https://ancient-hero-363.notion.site/461e2f52d9cf457788d71ebeea5317d3
 w3schools
 https://www.w3schools.com/js/default.asp
 
-APP_Course_Case
+APP 程式開發與設計
 https://github.com/seaniwei/APP_Course_Case
+
+前端網頁框架
+https://seansharingblog.blogspot.com/2021/02/front-end-web-framework-syllabus.html
