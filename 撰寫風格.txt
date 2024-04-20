@@ -1,0 +1,250 @@
+Basic
+- 字元編碼 - 檔案必須使用無BOM的UTF-8編碼。
+- 縮排 - 使用4個space，不要使用tab。請務必排列整齊。
+- 每行字數 - 建議在每行80個字左右，最多不要超過120個字。
+- PHP標籤
+    - PHP必須使用 <?php ?>，不可以使用其他標籤。
+    - 若PHP不包含HTML，則不用使用結束標籤 ?>。
+- 一般php檔名稱請用camelCase。
+- 單雙引號使用
+    - 字串一般使用`’`，SQL使用`“`
+    - $name = ‘Denny‘;
+    - $sql = “ select * from company ”;
+- 註解寫上一行，不寫旁邊
+
+常用
+  // 變數命名 - 請用camelCase。
+  $blnLoginOut = true;
+  // 常數命名 - 請用大寫英文字母加底線。
+  define('USER_TABLE', 'users');
+  // 私有變數 - 變數前加_
+  $_privateName = 'Denny';
+  // PHP key word - true, false, null, array, integer, string，請一律使用小寫。
+  $var = true;
+  $var = false;
+  $var = null;
+  // 邏輯符號左右兩邊各留一格空白。
+  if ($i = 0; $i < $max; $i++) {
+  // 連接符號左右兩邊各留一格空白。
+  $strUserName = $strName1 . ' ' . $strName2;
+
+條件判斷式
+- if 與 ( 中間留一格空白。
+- ) 與 { 中間留一格空白。
+- { 與if, elseif, else要在同一行，不用換行。
+- } 與elseif, else要在同一行，不用換行。
+- 有 elseif，一定要寫 else 以避免有例外狀況。
+  if ($arg === true) {
+  	// do something here
+  } elseif ($arg === null) {
+  	// do something here
+  } else {
+  	// do something here
+  }
+
+for
+- { 與for在同一行。
+- ) 與 { 中間留一格空白。
+- ; 之前不可以有空白，之後要留一個空白。
+- 第一個 ( 之後 不可以有空白，最後一個 ) 之前 不可以有空白。
+  for ($i = 0; $i < $max; $i++) {
+  	// loop here
+  }
+
+foreach
+- { 與foreach在同一行。
+- ) 與 { 中間留一格空白。
+- => 前後要留一個空白。
+- 第一個 ( 之後 不可以有空白，最後一個 ) 之前 不可以有空白。
+  foreach ($iterable as $key => $value) {
+	// do something
+  }
+
+while
+- { 與while在同一行。
+- ) 與 { 中間留一格空白。
+  while ($expr) {
+  	// do something
+  }
+
+switch
+- { 與switch在同一行。
+- ) 與 { 中間留一格空白。
+- case後的條件與 : 之間不可以有空白。
+- case必須縮排於switch，而break必須縮排於case。
+- PHP允許case內沒有break，但需在第一個case加上 //no break註解。
+- 一定要寫 default case。
+  switch ($expr) {
+  	case 0:
+  		echo 'First case, with a break';
+  		break;
+  	case 1:
+  		echo 'Second case, which falls through';
+  		// no break
+  	case 2:
+  	case 3:
+  	case 4:
+  		echo 'Third case, return instead of break';
+  	break;
+  		default:
+  		echo 'Default case';
+  		break;
+  }
+
+try catch
+- { 與try, catch要在同一行，不用換行。
+- ) 與 { 中間留一格空白。
+- } 與catch要在同一行，不用換行。
+- } 與finally要在同一行，不用換行。
+- 第一個 ( 之後不可以有空白，最後一個 ) 之前不可以有空白。
+  try {
+  	...
+  } catch (FirstExceptionType $e) {
+  	...
+  } catch (OtherExceptionType $e) {
+  	...
+  } finally {
+  	...
+  }
+
+Function
+- 使用camelCase命名。
+- { 必須與function 同一行。(與 PSR-2 規定不符)
+- Function名稱與 ( 之間不要留空白。
+- 第一個 ( 之後不可以有空白，最後一個 ) 之前不可以有空白。
+- 參數的 , 之前不可以有空白，而 , 之後需留一個空白。
+- 參數列若提供預設值，則必須放在最後一個參數。
+- 參數列允許多行寫法，第一個參數要在新的一行，且每一行只有一個參數，結束 ) 要在新的一行，且 ) 與 { 同行，之間要留一個空白。
+  function getUserName($arg1, $arg2, $arg3 = 294) {
+  	// doSomething
+  }
+  function checkUserPrivilege(
+  	$arg1,
+  	$arg2,
+  	$arg3 = 294
+  ) {
+  	// doSomething
+  }
+
+Namespace
+- 使用CamelCase命名。
+- namespace與 <?php之間需空一行。
+- namespace宣告與use之間需空一行，use與class之間再空一行。
+- 最上層namespace使用公司名稱。
+- 每個class都要使用namespace，最少搭配一層namespace。
+
+HTML宣告
+  <!DOCTYPE html>
+  <html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<title>Title</title>
+  	<link href="//cdn.hermes.com.tw/ajax/libs/ext/gpl/4.2.1/resources/css/ext-all.css" rel="stylesheet">
+  	<script src="//cdn.hermes.com.tw/ajax/libs/ext/gpl/4.2.1/bootstrap.js"></script>
+  </head>
+  <body>
+  </body>
+  </html>
+
+ExtJS 報表 (Javascript) - JSTool
+Button to generate Excel
+  {
+  	xtype: 'button',
+  	id: 'btnExcel',
+  	text: 'Excel',
+  	handler: function() {
+  		var form = Ext.create('Ext.form.Panel', {standardSubmit: true, url: '2excel.php'});
+  		form.submit({
+  			params: {
+  				data: Ext.JSON.encode(Ext.pluck(histStore.data.items, 'data'))
+  			}
+  		});
+  	}
+  }
+
+PHPExcel (PHP)
+開啟Server上的檔案編輯後讓User下載
+  require_once 'external/phpexcel/1.8/PHPExcel.php';
+  $objExcel = PHPExcel_IOFactory::load('OnCall.xlsx');
+  $objSheet = $objExcel->setActiveSheetIndexByName('Result');
+  // do something…
+  define('TEMP_FOLDER', '/var/tmp');
+  $obj_writer = new PHPExcel_Writer_Excel2007($obj_excel);
+  $obj_writer->setPreCalculateFormulas(false);
+  $obj_writer->save(TEMP_FOLDER . '/OnCall.xlsx');
+  header('Content-type: application/force-download');
+  header('Content-Disposition: attachment; filename="OnCall.xlsx"');
+  header('Content-Length: ' . filesize($_TEMP_FOLDER . '/OnCall.xlsx'));
+  readfile(TEMP_FOLDER . '/OnCall.xlsx');
+
+直接產生新的Excel內容讓User下載 (超過一定筆數不產生，直接alert)
+  require_once 'external/phpexcel/1.8/PHPExcel.php';
+
+autoload的使用 (PHP)
+  require_once 'autoload.php';
+  $obj = new HumanResources();
+  $priv = new Priv();
+  $prog1 = new Program();
+  $dataPriv = new DataPriv();
+
+上傳檔案
+  require_once 'dbconn_oracle/erp_apps_conn.php';
+  $file = new FileStore($erp_apps_conn, 'oncall_upload');
+  $file->storeFile('file1',array('TABLE_NAME' => 'HE_ONDUTY_UPLOAD',
+  'DATA_ID' => 5));
+  // 'file1': 前端html中所設定file input的name
+  // TABLE_NAME: 此檔案相關連的 Table
+  // DATA_ID: 此檔案相關連的 Data ID
+
+刪除檔案
+  $result = $file->removeFile(10, 'hsdakfjhsdlkjafswqepnf');
+  // Parameter 1: file id
+  // Parameter 2: hash code, optional
+
+產生下載/刪除清單
+  $sydney_rs = $crm_siebel_conn->Execute($strSQL);
+  if (is_object($sydney_rs)) {
+  		if ( $sydney_rs->RecordCount() > 0 ) {
+  				$sydney_recs = $sydney_rs->GetRows();
+  				foreach ($sydney_recs as $sydney_rec_id => $sydney_rec) {
+  						if ($sydney_rec['FILE_ID'] != '') {
+  								array_push($aryID, $sydney_rec['FILE_ID']);
+  						}
+  				}
+  		}
+  		if (count($aryID) > 0) {
+  				$key = $file->getHash($aryID);
+  		}
+  		echo json_encode(array('success' => true, 'data' => $sydney_recs, 'message' => '', 'totalCount' => $sydney_rs->RecordCount(), 'key' => $key));
+  } else {
+  		echo json_encode(array('success' => false, 'data' => array(), 'message' => $crm_siebel_conn->ErrorMsg(), 'totalCount' => 0));
+  }
+
+Javascript
+  var queryGrid2 = Ext.create('Ext.grid.Panel', {
+  	columns: [
+  		{text: 'Created Time', dataIndex: 'CREATED', sortable: true, width: 160},
+  		{text: 'Employee CName', dataIndex: 'EMPLOYEE_CNAME', sortable: false, width: 100},
+  		{text: 'Download', dataIndex: 'DOWNLOAD', sortable: false, width: 100, 
+              renderer: function(value, p, record) {
+                  if (record.data.DELETED != '') {
+                      return Ext.String.format('Deleted');
+                  } else {
+                      return Ext.String.format(
+                      '<b><a href="#" id="download_' + record.data.FILE_ID + '" onclick="downloadData(\'' + record.data.FILE_ID + '\', \'' + record.store.proxy.reader.jsonData['key'] + '\');">Download</a></b>');
+                  }
+              }
+          },
+  		{text: 'Delete', dataIndex: 'DELETE', sortable: false, width: 150, 
+              renderer: function(value, p, record) {
+                  if(record.data.DELETED != '') {
+                      return Ext.String.format('Deleted');
+                  } else {
+                      return Ext.String.format(
+                      '<b><a href="#" onclick="if(confirm(\'確定要刪除？\')){deleteBatchData(\'' + record.data.FILE_ID + '\', \'' + record.store.proxy.reader.jsonData['key'] + '\', this);}">Delete OnCall Data</a></b>');
+                  }
+              }
+          }
+  	]
+  });
