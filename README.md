@@ -18,3 +18,9 @@ https://codepen.io/ainipei0112/
 
 撰寫風格
 https://ancient-hero-363.notion.site/461e2f52d9cf457788d71ebeea5317d3
+
+w3schools
+https://www.w3schools.com/js/default.asp
+
+APP_Course_Case
+https://github.com/seaniwei/APP_Course_Case
