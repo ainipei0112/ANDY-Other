@@ -1,0 +1,93 @@
+// HR相關資源
+$hr = new HumanResources();
+$user = $hr->getEmployee($_SERVER['REMOTE_USER']);
+$userCompanyId = $user->getCompanyId();
+$userDeptCode = $user->getDepartmentCode();
+
+// 程序
+$prog = new Program();
+$keyword['NAME'] = 'Parking Management';
+$progrma = $prog ->get_prog_details($keyword);
+$programId = $progrma[0]['ID'];
+
+// 角色權限(add、del、edit、view)
+$priv = new Priv();
+$myPriv = $priv->get_my_priv($_SERVER['REMOTE_USER'], $programId, 'prog');
+
+HumanResources
+
+引用
+require_once 'hermes/HR/HumanResources.php';
+$HR = new HumanResources();
+
+自己本身
+$employee = $HR->getEmployee($REMOTE_USER);
+$userCompId = $employee->getCompanyId();
+$userDeptId = $employee->getDepartmentId();
+
+Company公司
+$comp = $HR->getCompany($compId);
+$compId = $comp->getId();
+$compName = $comp->getWellknownChName();
+$compAbbr = $comp->getAbbr();
+
+Department部門
+  部門代號搜尋
+    // 部門資料
+    $dept = $HR->getDepartment($deptId);
+    // 部門權限的deptCode
+    $deptCode = $dept->getCode();
+    // 部門權限的部門公司
+    $compId = $dept->getCompanyId();
+  公司代號找部門
+    $depts = $HR->getDepartmentsByCompany($compId);
+    foreach ($depts as $dept) {
+        $deptCode = $dept->getCode();
+        if (!in_array($deptCode, $privDeptCodes)) {
+            array_push($privDeptCodes, $deptCode);
+        }
+    }
+  依組織Id找部門
+    $orgDetailArr = $HR->getOrgDetail($orgId);
+    // 依組織Id找上層組織Id
+    foreach ($orgDetailArr as $orgDetail) {
+        $parentOrgId = $orgDetail['1'];
+        $empDetailArr['parentOrgId'] = $parentOrgId;
+        // $orgCompId = $orgDetail['2'];
+        // $orgDeptCode = $orgDetail['3'];
+        // old hr class
+        // $deptArr = $HR->getDepartment($orgCompId, $orgDeptCode);
+        // $empDetailArr['orgDeptId'] = $deptArr->getId();
+    }
+
+Employees員工
+  多參數模糊查詢
+    $conditions = array();
+    $conditions['userName'] = $val;
+    $conditions['employeeNo'] = $val;
+    $conditions['nickName'] = $val;
+    $emps = $HR->getEmployeesByKeywordOR($conditions);
+    if(!empty($emps)) {
+        foreach($emps as $empClass) {
+            $empUserName = $empClass->username;
+            if (!in_array($empUserName, $keeperArr)) {
+                array_unshift($keeperArr, $empUserName);
+            }
+        }
+    }
+  工號查詢
+    $empNoList = $HR->getEmployeesByNo($val, 0, 0);
+    if(!empty($empNoList)) {
+    		foreach($empNoList as $empClass) {
+             $empUserName = $empClass->username;
+             if (!in_array($empUserName, $keeperArr)) {
+                 array_unshift($keeperArr, $empUserName);
+             }
+         }
+    }
+
+  NickName查詢
+    $empNNameList = $HR->getEmployeesByNName($val, 0, 0);
+  
+  中文名查詢
+    $empCNameList = $HR->getEmployeesByCName($val, 0, 0);

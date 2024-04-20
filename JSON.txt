@@ -1,0 +1,24 @@
+// Future-friendly json_decode
+if (!function_exists('json_encode')) {
+    function json_encode($data) {
+        require_once 'lib/JSON.php';
+        $json = new Services_JSON();
+        return ($json->encode($data));
+    }
+}
+if (!function_exists('json_decode')) {
+    function json_decode($data) {
+        require_once 'lib/JSON.php';
+        $json = new Services_JSON();
+        return ($json->decode($data));
+    }
+}
+//判斷wf傳送過來的資料是否有值
+if (!isset($_REQUEST['json']) || empty($_REQUEST['json'])) {
+		apiResponse(false , "[ERROR] Variable named json is empty or undefined.");
+}
+$wfData = json_decode($_REQUEST['json'],true);
+foreach ($wfData as $checkrow){
+    $action= isset($checkrow['action']) ? trim($checkrow['action']) : '';
+    $date= isset($checkrow['date']) ? trim($checkrow['date']) : '';
+}

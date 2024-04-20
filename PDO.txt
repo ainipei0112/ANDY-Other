@@ -1,0 +1,150 @@
+新增字串：PDO::quote
+if (!empty($q_company_id)) {
+	$sql .= " AND EE.COMPANY_ID = " . $oa_parking_conn->quote($q_company_id);
+}
+
+PHP-PDO errorInfo()錯誤訊息
+- 0 => SQLSTATE錯誤碼（5個字母或數字組成的在ANSI SQL標準中定義的標識符）
+- 1 => 錯誤代碼
+- 2 => 錯誤訊息
+  $sth = $sql_pdo->prepare($sql);
+  $stmt=$select->execute($arr);
+  if(!$stmt){
+  		/*SQL語句執行失敗，顯示原因*/
+  		$error = $sth->errorInfo();
+  		echo $error[2];
+  }
+
+select
+  $keeper = isset($_REQUEST['keeper']) ? $_REQUEST['keeper'] : '';
+  $filter = "";
+  if ($keeper != '') {
+      $filter .= " AND KEEPER = " . $oa_AssetMgt_conn->quote($keeper);
+  }
+  if ($filter != '') {
+      $sql = "SELECT A.ASSET_NUMBER, A.ASSET_DESC, A.ACCOUNT_DATE, A.QUANTITY, A.CURRENCY, A.ASSET_VALUE, L.VALUE AS LOCATION, F.VALUE AS FLOOR, A.LOCATION_DESC, A.STATUS, A.KEEPER_DEPT_ID, A.KEEPER
+  						FROM ASSET A
+  						LEFT JOIN ASSET_LIST_OF_VALUE L ON A.LOCATION = L.ID
+  						LEFT JOIN ASSET_LIST_OF_VALUE F ON A.FLOOR = F.ID
+  						WHERE  A.REMOVED = 0
+  						$filter
+  						ORDER BY  A.ASSET_NUMBER";
+      $rows = $oa_AssetMgt_conn->getRows($sql, PDO::FETCH_NAMED);
+      foreach ($rows as $key => $row) {
+          $rows[$key] = refreshRow($row);
+      }
+      echo json_encode(array('success' => true, 'data' => $rows));
+  } else {
+      echo json_encode(array('success' => false, 'data' => array(), 'msg' => '參數不正確'));
+  }
+
+取得Last Insert Id
+  $id = $oa_parking_conn->lastInsertId();
+
+insert
+  // TRANSACTION
+  $oa_parking_conn->beginTransaction();
+      // 取得該資料的流水號
+      $id = $oa_parking_conn->lastInsertId();
+      $sql = "INSERT INTO TABLE_NAME(id, column_name,isdeleted, creation_date, created_by, last_update_date, last_updated_by)
+              VALUES(?, ?, ?, 'N', now(), 'SYSTEM', null, ''); ";
+      $sth = $oa_parking_conn->prepare($sql);
+      $sth->bindParam(1, $id, PDO::PARAM_INT);
+      $sth->bindParam(2, column_name, PDO::PARAM_STR);
+      $stmt = $sth->execute();
+      if (!$stmt) {
+          $error = $sth->errorInfo();
+          echo $error[2];
+          break;
+      }
+      $insertCnt = $sth->rowCount();
+      if ($insertCnt > 0) {
+          // COMMIT
+          $oa_parking_conn->commit();
+          echo json_encode(array('success' => true, 'data' => array(), 'msg' => '新增' . $insertCnt . '筆成功')) . '<br>';
+      } else {
+          $oa_parking_conn->rollBack();
+          echo json_encode(array('success' => false, 'data' => array(), 'msg' => '新增失敗，請與 IT 聯繫')) . '<br>';
+      }
+  } catch (Exception $e) {
+          $oa_parking_conn->rollBack();
+          echo json_encode(array('success' => false, 'data' => array(), 'msg' => $e->getMessage())) . '<br>';
+      }
+  }
+
+update
+  // 資產清單
+  $assetList = isset($_REQUEST['assetList']) ? $_REQUEST['assetList'] : '';
+  // 判斷參數是否完整
+  if ($assetList != '') {
+      $assetArr = explode(',', $assetList);
+      $in = "";
+      foreach ($assetArr as $asset) {
+          $in .= "'" . $asset . "',";
+      }
+      $in = substr($in, 0, (strlen($in) - 1));
+      $sql = "UPDATE ASSET
+  						SET LAST_UPDATE_BY = 'SYSTEM'
+  						, LAST_UPDATE = NOW()
+  						, IS_LOCKED = 'Y'
+  						WHERE ASSET_NUMBER in ($in)";
+      $updateCnt = $oa_AssetMgt_conn->update($sql);
+      if ($updateCnt > 0) {
+          echo json_encode(array('success' => true, 'msg' => '鎖定成功'));
+      } else {
+          echo json_encode(array('success' => false, 'msg' => '鎖定失敗，請與 IT 聯繫'));
+      }
+  } else {
+      echo json_encode(array('success' => false, 'msg' => '參數不正確'));
+  }
+
+新舊寫法差異-範例
+舊版old_oa_parking_conn
+  function check_parking_license($parkding_permit_id, $license_plate_id){
+  		global $old_oa_parking_conn;
+  		$parking_with_license_id='';
+  		$sql = "SELECT ID
+  			      FROM PK_PARKING_WITH_LICENSE
+  			      WHERE PARKING_PERMIT_ID='$parkding_permit_id'
+  		        AND LICENSE_PLATE_ID='$license_plate_id'";
+  
+  		$result = mysqli_query($old_oa_parking_conn, $sql);
+  		if ($row = mysqli_fetch_array($result)) {
+  		    $parking_with_license_id = $row['ID'];
+  		}
+  		return $parking_with_license_id;
+  }
+
+新版oa_parking_conn
+  function check_parking_license($parkding_permit_id, $license_plate_id){
+  		global $oa_parking_conn;
+  		$parking_with_license_id = '';
+  		$sql = "SELECT ID
+  			      FROM PK_PARKING_WITH_LICENSE
+  			      WHERE PARKING_PERMIT_ID='$parkding_permit_id'
+  		        AND LICENSE_PLATE_ID='$license_plate_id'";
+  		
+  		$result = $oa_parking_conn->getRows($sql, PDO::FETCH_NAMED);
+  		if (!empty($result)) {
+  		    $parking_with_license_id = $result[0]['ID'];
+  		}
+  		return $parking_with_license_id;
+  }
+
+查詢資料
+// 舊
+$pkn_rs = mysqli_query($old_oa_parking_conn, $sql);
+$data = get_sql_data($pkn_rs);
+// 新
+$data = $oa_parking_conn->getRows($sql, PDO::FETCH_NAMED);
+
+讀取資料
+// 舊
+if ($row = mysqli_fetch_array($result)) {
+    $siteId = $row['SITE_ID'];
+}
+// 新
+$data_count = sizeOf($data);
+for ($i = 0; $i < $data_count; $i++) {
+    $siteId = $data[$i]["SITE_ID"];
+}
