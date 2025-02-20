@@ -1,6 +1,3 @@
-# AOI
-Created with CodeSandbox
-
 整理程式碼
 https://www.10bestdesign.com/dirtymarkup/js/
 
@@ -27,7 +24,3 @@ https://github.com/seaniwei/APP_Course_Case
 
 前端網頁框架
 https://seansharingblog.blogspot.com/2021/02/front-end-web-framework-syllabus.html
-
-AI：
-OpenRouter
-monica
